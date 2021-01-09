@@ -1,13 +1,24 @@
+import pytest
 from selenium import webdriver
 from page_objects.home_page import HomePage
+from utils.driver_manager import DriverManager
 from page_objects.login_modal import LoginModal
 from page_objects.member_area import MemberArea
 
-class LoginTests():
+class TestLogin:
+    @classmethod
+    def setup_class(self):
+        dm = DriverManager('Firefox')
+        self.driver = dm.driver
+
+    @classmethod
+    def teardown_class(self):
+        if self.driver != None:
+            self.driver.quit()
     
-    def t01_successful_login(self, driver):
+    def test01_successful_login_test(self):
         print('Starting execution of test case T01 - Successful Login.')
-        home = HomePage(driver)
+        home = HomePage(self.driver)
         home.given_that_i_am_on_home_page()
         login_modal = home.when_i_click_on_enter_button()
         login_modal.then_i_should_see_a_modal_asking_for_my_email()
@@ -22,9 +33,9 @@ class LoginTests():
         home.then_i_see_the_home_page()
         print('Finished execution of test case T01 - Successful Login with PASSED status.')
 
-    def t02_unsuccessful_login(self, driver):
+    def test02_unsuccessful_login_test(self):
         print('Starting execution of test case T02 - Unsuccessful Login.')
-        home = HomePage(driver)
+        home = HomePage(self.driver)
         home.given_that_i_am_on_home_page()
         login_modal = home.when_i_click_on_enter_button()
         login_modal.then_i_should_see_a_modal_asking_for_my_email()
