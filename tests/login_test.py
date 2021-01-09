@@ -16,8 +16,13 @@ class TestLogin:
         if self.driver != None:
             self.driver.quit()
     
+    def setup_method(self, method):
+        current_url = self.driver.current_url
+        if current_url == 'https://teamshift-qa.crossknowledge.com/':
+            self.driver.delete_all_cookies()
+            self.driver.execute_script('window.localStorage.clear();')
+    
     def test01_successful_login_test(self):
-        print('Starting execution of test case T01 - Successful Login.')
         home = HomePage(self.driver)
         home.given_that_i_am_on_home_page()
         login_modal = home.when_i_click_on_enter_button()
@@ -29,12 +34,8 @@ class TestLogin:
         member_area = login_modal.and_i_click_on_login_button()
         member_area.then_i_should_see_the_member_area_page()
         member_area.and_my_name_should_be_on_the_page_header('Thiago Secomandi Galdino')
-        member_area.when_i_log_out_of_the_member_area()
-        home.then_i_see_the_home_page()
-        print('Finished execution of test case T01 - Successful Login with PASSED status.')
 
     def test02_unsuccessful_login_test(self):
-        print('Starting execution of test case T02 - Unsuccessful Login.')
         home = HomePage(self.driver)
         home.given_that_i_am_on_home_page()
         login_modal = home.when_i_click_on_enter_button()
@@ -45,4 +46,3 @@ class TestLogin:
         login_modal.when_i_type_the_password('SENHA')
         login_modal.and_i_click_on_login_button()
         login_modal.then_i_should_see_an_error_message()
-        print('Finished execution of test case T02 - Unsuccessful Login with PASSED status.')
