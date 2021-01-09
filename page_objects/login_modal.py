@@ -1,8 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from page_objects.member_area import MemberArea
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
-from page_objects.member_area import MemberArea
 
 class LoginModal():
     
@@ -16,20 +16,23 @@ class LoginModal():
     lnk_fogot_password = (By.CSS_SELECTOR, '.login-form__forgot-password')
     lnk_request_access_link = (By.CSS_SELECTOR, '.js-login-form-request')
     btn_login = (By.XPATH, '//div[@id="js-modal-login-member"]//button[@type="submit"]')
+    div_alert = (By.XPATH, '//div[contains(@class,"login-form__alert-container")][not(contains(@class,"hidden"))]')
+    lbl_alert_text = (By.XPATH, '//div[contains(@class,"login-form__alert-container")][not(contains(@class,"hidden"))]//p')
     
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, 15)
 
     def then_i_should_see_a_modal_asking_for_my_email(self):
+        self.wait.until(visibility_of_element_located(self.modal_login_member))
         self.driver.find_element(*self.modal_login_member)
         header_text = self.driver.find_element(*self.lbl_header_login_modal).text
-        assert header_text == 'Faça o login no TeamSHIFT'
+        assert header_text == 'Faça o login no TeamSHIFT', 'Obtained: ' + header_text
         subtitle_text = self.driver.find_element(*self.lbl_text_login_modal).text
-        assert subtitle_text == 'Para fazer login no TeamSHIFT, insira o seu e-mail corporativo:'
+        assert subtitle_text == 'Para fazer login no TeamSHIFT, insira o seu e-mail corporativo:', 'Obtained: ' + subtitle_text
         self.driver.find_element(*self.txt_email_login)
         cancel_button_text = self.driver.find_element(*self.btn_cancel_login).text
-        assert cancel_button_text == 'CANCELAR'
+        assert cancel_button_text == 'CANCELAR', 'Obtained: ' + cancel_button_text
         next_button_text = self.driver.find_element(*self.btn_next_login).text
         assert next_button_text == 'PRÓXIMO', 'Obtained: ' + next_button_text
 
@@ -47,7 +50,7 @@ class LoginModal():
         self.driver.find_element(*self.lnk_fogot_password)
         self.driver.find_element(*self.lnk_request_access_link)
         login_button_text = self.driver.find_element(*self.btn_login).text
-        assert login_button_text == 'LOGIN'
+        assert login_button_text == 'LOGIN', 'Obtained: ' + login_button_text
 
     def when_i_type_the_password(self, password):
         self.wait.until(visibility_of_element_located(self.txt_password_login))
@@ -57,3 +60,9 @@ class LoginModal():
         self.wait.until(visibility_of_element_located(self.btn_login))
         self.driver.find_element(*self.btn_login).click()
         return MemberArea(self.driver)
+
+    def then_i_should_see_an_error_message(self):
+        self.wait.until(visibility_of_element_located(self.div_alert))
+        self.wait.until(visibility_of_element_located(self.lbl_alert_text))
+        alert_text = self.driver.find_element(*self.lbl_alert_text).text
+        assert alert_text == 'A autenticação falhou com o e-mail e a senha fornecidos.', 'Obtained: ' + alert_text
