@@ -1,1 +1,1 @@
-# WileyQA
+# Repository containing a sample project using Python and Selenium
