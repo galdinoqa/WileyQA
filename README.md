@@ -16,4 +16,4 @@ This project has the objective of presenting the organization and code writting 
 4. Download the latest version of [Firefox](https://www.mozilla.org/pt-BR/firefox/new/) and [Geckodriver](https://github.com/mozilla/geckodriver/releases).
 5. Put the executable file from geckodriver in any folder from PATH environment variable.
 6. On the command prompt, type `pytest <path to repository root>\tests` to execute all the tests
-7. To change the webdriver to use chromedriver, put the executable in the same folder as the geckodriver executable file and change the browser name in the login_test.py file to `Chrome` on the class setup function.
+7. To use chromedriver, put the executable in the same folder as the geckodriver executable file and change the browser name in the login_test.py file to `Chrome` on the class setup function.
