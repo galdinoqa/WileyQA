@@ -18,7 +18,7 @@ class TestLogin:
     
     def setup_method(self, method):
         current_url = self.driver.current_url
-        if current_url == 'https://teamshift-qa.crossknowledge.com/':
+        if current_url != 'about:blank':
             self.driver.delete_all_cookies()
             self.driver.execute_script('window.localStorage.clear();')
     
