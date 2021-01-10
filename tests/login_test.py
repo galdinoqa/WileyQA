@@ -16,7 +16,7 @@ class TestLogin:
         if self.driver != None:
             self.driver.quit()
     
-    def setup_method(self, method):
+    def setup_method(self):
         current_url = self.driver.current_url
         if current_url != 'about:blank':
             self.driver.delete_all_cookies()
